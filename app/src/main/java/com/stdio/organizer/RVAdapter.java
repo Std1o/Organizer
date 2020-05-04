@@ -19,12 +19,14 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.DataViewHolder> {
         CardView cv;
         TextView tvTitle;
         TextView tvDescription;
+        TextView tvTime;
 
         DataViewHolder(View itemView) {
             super(itemView);
             cv = itemView.findViewById(R.id.cv);
             tvTitle = itemView.findViewById(R.id.tvTitle);
             tvDescription = itemView.findViewById(R.id.tvDescription);
+            tvTime = itemView.findViewById(R.id.tvTime);
         }
     }
 
@@ -52,6 +54,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.DataViewHolder> {
     public void onBindViewHolder(DataViewHolder dataViewHolder, final int position) {
         dataViewHolder.tvTitle.setText(dataList.get(position).getTitle());
         dataViewHolder.tvDescription.setText(dataList.get(position).getDescription());
+        dataViewHolder.tvTime.setText(dataList.get(position).getTime());
         dataViewHolder.cv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

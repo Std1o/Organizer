@@ -133,11 +133,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .setPositiveButton("Добавить", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        addToDB(etTitle.getText().toString(), etDescription.getText().toString(), "15.05.2020 14:55");
+                        addToDB(etTitle.getText().toString(), etDescription.getText().toString(),
+                                tvDate.getText().toString() + tvTime.getText().toString());
                         DataModel dataModel = new DataModel();
                         dataModel.setTitle(etTitle.getText().toString());
                         dataModel.setDescription(etDescription.getText().toString());
-                        dataModel.setTime("15.05.2020 14:55");
+                        dataModel.setTime(tvDate.getText().toString() + tvTime.getText().toString());
                         list.add(dataModel);
                         adapter.notifyDataSetChanged();
                     }
