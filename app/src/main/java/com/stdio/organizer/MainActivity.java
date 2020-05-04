@@ -30,9 +30,14 @@ public class MainActivity extends AppCompatActivity {
 
     private void initializeData() {
         dataList = new ArrayList<>();
-        dataList.add(new DataModel(getString(R.string.news_header_top_stories), getString(R.string.news_body1)));
-        dataList.add(new DataModel(getString(R.string.news_header_world), getString(R.string.news_body4)));
-        dataList.add(new DataModel(getString(R.string.news_header_australia), getString(R.string.news_body6)));
+        DataModel dataModel = new DataModel();
+        dataModel.setTitle("Title");
+        dataModel.setDescription("Description one two three four");
+        dataModel.setTime("12.03.2020 15:50");
+        dataList.add(dataModel);
+        dataList.add(dataModel);
+        dataList.add(dataModel);
+        dataList.add(dataModel);
     }
 
     private void initializeAdapter() {

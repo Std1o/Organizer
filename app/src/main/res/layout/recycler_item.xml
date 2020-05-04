@@ -41,5 +41,11 @@
             android:textAppearance="@style/TextAppearance.Body2"
             tools:text="A long-serving former solicitor-general has launched a withering assessment of Attorney-General George Brandis' relationship with the nation's second law officer."/>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="12.03.2020 15:40"
+            android:layout_gravity="right"/>
+
     </LinearLayout>
 </androidx.cardview.widget.CardView>

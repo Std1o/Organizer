@@ -50,8 +50,8 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.DataViewHolder> {
 
     @Override
     public void onBindViewHolder(DataViewHolder dataViewHolder, final int position) {
-        dataViewHolder.tvTitle.setText(dataList.get(position).title);
-        dataViewHolder.tvDescription.setText(dataList.get(position).description);
+        dataViewHolder.tvTitle.setText(dataList.get(position).getTitle());
+        dataViewHolder.tvDescription.setText(dataList.get(position).getDescription());
         dataViewHolder.cv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
