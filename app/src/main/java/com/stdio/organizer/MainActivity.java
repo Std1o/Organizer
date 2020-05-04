@@ -5,7 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.ContentValues;
 import android.content.DialogInterface;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -14,13 +17,18 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ArrayList<DataModel> dataList;
+    private ArrayList<DataModel> list;
     private RecyclerView rv;
+    DBHelper dbHelper;
+    private static SQLiteDatabase database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        dbHelper = new DBHelper(this);
+        database = dbHelper.getWritableDatabase();
+        getData();
         initRecyclerView();
     }
 
@@ -28,20 +36,30 @@ public class MainActivity extends AppCompatActivity {
         rv = findViewById(R.id.recyclerView);
         LinearLayoutManager llm = new LinearLayoutManager(this);
         rv.setLayoutManager(llm);
-        initializeData();
         initializeAdapter();
     }
 
-    private void initializeData() {
-        dataList = new ArrayList<>();
-        DataModel dataModel = new DataModel();
-        dataModel.setTitle("Title");
-        dataModel.setDescription("Description one two three four");
-        dataModel.setTime("12.03.2020 15:50");
-        dataList.add(dataModel);
-        dataList.add(dataModel);
-        dataList.add(dataModel);
-        dataList.add(dataModel);
+    private void getData() {
+        list = new ArrayList();
+
+        Cursor cursor = database.query(DBHelper.TABLE_EXPENSES, null, null, null, null, null, null);
+
+        if (cursor.moveToFirst()) {
+            int titleIndex = cursor.getColumnIndex(DBHelper.KEY_TITLE);
+            int descriptionIndex = cursor.getColumnIndex(DBHelper.KEY_DESCRIPTION);
+            int timeIndex = cursor.getColumnIndex(DBHelper.KEY_TIME);
+            int idIndex = cursor.getColumnIndex(DBHelper.KEY_ID);
+            do {
+                DataModel dataModel = new DataModel();
+                dataModel.setTitle(cursor.getString(titleIndex));
+                dataModel.setDescription(cursor.getString(descriptionIndex));
+                dataModel.setTime(cursor.getString(timeIndex));
+                dataModel.setId(cursor.getInt(idIndex));
+                list.add(dataModel);
+            } while (cursor.moveToNext());
+        } else {
+            cursor.close();
+        }
     }
 
     public void onClick(View view) {
@@ -54,13 +72,11 @@ public class MainActivity extends AppCompatActivity {
         alertDialog.setTitle("Новое напоминание");
         final EditText etTitle = view.findViewById(R.id.etTitle);
         final EditText etDescription = view.findViewById(R.id.etDescription);
-        final DataModel dataModel = new DataModel();
         alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Добавить", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                dataModel.setTitle(etTitle.getText().toString());
-                dataModel.setDescription(etDescription.getText().toString());
-                //myRef.push().setValue(finalDataModel);
+                addToDB(etTitle.getText().toString(), etDescription.getText().toString(), "15.05.2020 14:55");
+                initializeAdapter();
             }
         });
 
@@ -74,8 +90,16 @@ public class MainActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
+    private void addToDB(String title, String desc, String time) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DBHelper.KEY_TITLE, title);
+        contentValues.put(DBHelper.KEY_DESCRIPTION, desc);
+        contentValues.put(DBHelper.KEY_TIME, time);
+        database.insert(DBHelper.TABLE_EXPENSES, null, contentValues);
+    }
+
     private void initializeAdapter() {
-        RVAdapter adapter = new RVAdapter(dataList, this);
+        RVAdapter adapter = new RVAdapter(list, this);
         rv.setAdapter(adapter);
     }
 }
