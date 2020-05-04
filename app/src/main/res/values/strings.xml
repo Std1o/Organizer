@@ -2,6 +2,7 @@
     <string name="app_name">Органайзер</string>
 
     <string name="time">%s %s</string>
+    <string name="date">%s&#160;</string>
     <string name="title">Заголовок</string>
     <string name="description">Введите текст уведомления…</string>
 </resources>

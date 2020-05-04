@@ -5,23 +5,30 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.DatePickerDialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private ArrayList<DataModel> list;
     private RecyclerView rv;
     DBHelper dbHelper;
     private static SQLiteDatabase database;
     RVAdapter adapter;
+    Calendar dateCalendar = Calendar.getInstance();
+    TextView tvDate;
+    TextView tvTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,13 +71,60 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClick(View view) {
-        addNote();
+        switch (view.getId()) {
+            case R.id.fab:
+                addNote();
+                break;
+            case R.id.tvDate:
+                showDatePicker();
+                break;
+            case R.id.tvTime:
+                break;
+        }
+    }
+
+    private void showDatePicker() {
+        DatePickerDialog.OnDateSetListener dateSetListener = datePickerListener;
+        new DatePickerDialog(this, dateSetListener,
+                dateCalendar.get(Calendar.YEAR),
+                dateCalendar.get(Calendar.MONTH),
+                dateCalendar.get(Calendar.DAY_OF_MONTH))
+                .show();
+    }
+
+    private DatePickerDialog.OnDateSetListener datePickerListener=new DatePickerDialog.OnDateSetListener() {
+        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+            tvDate.setText(getString(R.string.date, getDate(year, monthOfYear, dayOfMonth)));
+        }
+    };
+
+    private String getDate(int year, int monthOfYear, int dayOfMonth) {
+        int trueMonth = ++monthOfYear;
+        String strDay = null;
+        String strTrueMonth = null;
+        if (String.valueOf(dayOfMonth).length() == 1){
+            strDay = "0" + dayOfMonth;
+        }
+        else {
+            strDay = String.valueOf(dayOfMonth);
+        }
+        if (String.valueOf(trueMonth).length() == 1){
+            strTrueMonth = "0" + trueMonth;
+        }
+        else {
+            strTrueMonth = String.valueOf(trueMonth);
+        }
+        return strDay + "." + strTrueMonth + "." + year;
     }
 
     private void addNote() {
         View dialogView = getLayoutInflater().inflate(R.layout.add_dialog, null);
         final EditText etTitle = dialogView.findViewById(R.id.etTitle);
         final EditText etDescription = dialogView.findViewById(R.id.etDescription);
+        tvDate = dialogView.findViewById(R.id.tvDate);
+        tvTime = dialogView.findViewById(R.id.tvTime);
+        tvDate.setOnClickListener(this);
+        tvTime.setOnClickListener(this);
         AlertDialog.Builder dialog = new AlertDialog.Builder(this)
                 .setView(dialogView)
                 .setPositiveButton("Добавить", new DialogInterface.OnClickListener() {
