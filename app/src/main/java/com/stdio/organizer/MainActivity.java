@@ -68,32 +68,26 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void addNote() {
-        View view = getLayoutInflater().inflate(R.layout.add_dialog, null);
-        final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
-        alertDialog.setTitle("Новое напоминание");
-        final EditText etTitle = view.findViewById(R.id.etTitle);
-        final EditText etDescription = view.findViewById(R.id.etDescription);
-        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Добавить", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                addToDB(etTitle.getText().toString(), etDescription.getText().toString(), "15.05.2020 14:55");
-                DataModel dataModel = new DataModel();
-                dataModel.setTitle(etTitle.getText().toString());
-                dataModel.setDescription(etDescription.getText().toString());
-                dataModel.setTime("15.05.2020 14:55");
-                list.add(dataModel);
-                adapter.notifyDataSetChanged();
-            }
-        });
-
-        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Отмена", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-        alertDialog.setView(view);
-        alertDialog.show();
+        View dialogView = getLayoutInflater().inflate(R.layout.add_dialog, null);
+        final EditText etTitle = dialogView.findViewById(R.id.etTitle);
+        final EditText etDescription = dialogView.findViewById(R.id.etDescription);
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this)
+                .setView(dialogView)
+                .setPositiveButton("Добавить", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        addToDB(etTitle.getText().toString(), etDescription.getText().toString(), "15.05.2020 14:55");
+                        DataModel dataModel = new DataModel();
+                        dataModel.setTitle(etTitle.getText().toString());
+                        dataModel.setDescription(etDescription.getText().toString());
+                        dataModel.setTime("15.05.2020 14:55");
+                        list.add(dataModel);
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+        dialog.setTitle("Новое напоминание");
+        dialog.setNegativeButton("Отмена", null);
+        dialog.show();
     }
 
     private void addToDB(String title, String desc, String time) {
