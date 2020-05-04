@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView rv;
     DBHelper dbHelper;
     private static SQLiteDatabase database;
+    RVAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         rv = findViewById(R.id.recyclerView);
         LinearLayoutManager llm = new LinearLayoutManager(this);
         rv.setLayoutManager(llm);
-        initializeAdapter();
+        setAdapter();
     }
 
     private void getData() {
@@ -76,7 +77,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 addToDB(etTitle.getText().toString(), etDescription.getText().toString(), "15.05.2020 14:55");
-                initializeAdapter();
+                DataModel dataModel = new DataModel();
+                dataModel.setTitle(etTitle.getText().toString());
+                dataModel.setDescription(etDescription.getText().toString());
+                dataModel.setTime("15.05.2020 14:55");
+                list.add(dataModel);
+                adapter.notifyDataSetChanged();
             }
         });
 
@@ -98,8 +104,8 @@ public class MainActivity extends AppCompatActivity {
         database.insert(DBHelper.TABLE_EXPENSES, null, contentValues);
     }
 
-    private void initializeAdapter() {
-        RVAdapter adapter = new RVAdapter(list, this);
+    private void setAdapter() {
+        adapter = new RVAdapter(list, this);
         rv.setAdapter(adapter);
     }
 }
