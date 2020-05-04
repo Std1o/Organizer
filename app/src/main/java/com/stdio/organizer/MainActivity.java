@@ -2,6 +2,7 @@ package com.stdio.organizer;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,14 +22,14 @@ import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private ArrayList<DataModel> list;
+    private ArrayList<DataModel> list = new ArrayList<>();
     private RecyclerView rv;
     DBHelper dbHelper;
     private static SQLiteDatabase database;
     RVAdapter adapter;
     Calendar dateCalendar = Calendar.getInstance();
     TextView tvDate;
-    TextView tvTime;
+    public static TextView tvTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void getData() {
-        list = new ArrayList();
+        list = new ArrayList<>();
 
         Cursor cursor = database.query(DBHelper.TABLE_EXPENSES, null, null, null, null, null, null);
 
@@ -79,6 +80,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 showDatePicker();
                 break;
             case R.id.tvTime:
+                DialogFragment dlg = new TimePickerFragment();
+                dlg.show(getSupportFragmentManager(), "TimePicker");
                 break;
         }
     }
