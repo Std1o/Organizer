@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -30,6 +31,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Calendar dateCalendar = Calendar.getInstance();
     TextView tvDate;
     public static TextView tvTime;
+    private AlarmManagerBroadcastReceiver alarm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         dbHelper = new DBHelper(this);
         database = dbHelper.getWritableDatabase();
+        alarm = new AlarmManagerBroadcastReceiver();
         getData();
         initRecyclerView();
     }
@@ -133,14 +136,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .setPositiveButton("Добавить", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        addToDB(etTitle.getText().toString(), etDescription.getText().toString(),
-                                tvDate.getText().toString() + tvTime.getText().toString());
+                        String time = tvDate.getText().toString() + tvTime.getText().toString();
+                        addToDB(etTitle.getText().toString(), etDescription.getText().toString(), time);
                         DataModel dataModel = new DataModel();
                         dataModel.setTitle(etTitle.getText().toString());
                         dataModel.setDescription(etDescription.getText().toString());
-                        dataModel.setTime(tvDate.getText().toString() + tvTime.getText().toString());
+                        dataModel.setTime(time);
                         list.add(dataModel);
                         adapter.notifyDataSetChanged();
+                        if(alarm!=null){
+                            alarm.SetAlarm(MainActivity.this, time, etTitle.getText().toString());
+                        }else{
+                            Toast.makeText(MainActivity.this,"Alarm is null", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
         dialog.setTitle("Новое напоминание");
