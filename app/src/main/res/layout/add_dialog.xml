@@ -17,10 +17,16 @@
 
     <EditText
         android:id="@+id/etDescription"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_marginTop="3dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_height="150dp"
+        android:gravity="top"
         android:ems="10"
-        android:inputType="phone"
-        android:hint="@string/description"
-        android:layout_marginBottom="10dp"/>
+        android:inputType="textPersonName|textCapSentences|textMultiLine"
+        android:background="@drawable/selector_lines_edit_view_bg"
+        android:paddingTop="5dp"
+        android:paddingLeft="10dp"
+        android:hint="@string/description" />
 </LinearLayout>

@@ -1,7 +1,7 @@
 <resources>
-    <string name="app_name">Organizer</string>
+    <string name="app_name">Органайзер</string>
 
     <string name="time">%s %s</string>
     <string name="title">Заголовок</string>
-    <string name="description">Текст уведомления</string>
+    <string name="description">Введите текст уведомления…</string>
 </resources>
