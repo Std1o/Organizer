@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -129,6 +130,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         final EditText etDescription = dialogView.findViewById(R.id.etDescription);
         tvDate = dialogView.findViewById(R.id.tvDate);
         tvTime = dialogView.findViewById(R.id.tvTime);
+        tvDate.setText(new SimpleDateFormat("dd.MM.yyyy").format(Calendar.getInstance().getTime()) + " ");
+        tvTime.setText(new SimpleDateFormat("HH:mm").format(Calendar.getInstance().getTime()));
         tvDate.setOnClickListener(this);
         tvTime.setOnClickListener(this);
         AlertDialog.Builder dialog = new AlertDialog.Builder(this)
