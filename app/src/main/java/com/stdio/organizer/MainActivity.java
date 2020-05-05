@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private DatePickerDialog.OnDateSetListener datePickerListener=new DatePickerDialog.OnDateSetListener() {
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-            tvDate.setText(getString(R.string.date, getDate(year, monthOfYear, dayOfMonth)));
+            tvDate.setText(getDate(year, monthOfYear, dayOfMonth) + " ");
         }
     };
 
