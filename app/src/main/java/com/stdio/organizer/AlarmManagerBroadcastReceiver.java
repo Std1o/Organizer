@@ -37,51 +37,32 @@ public class AlarmManagerBroadcastReceiver extends BroadcastReceiver {
         wl.acquire();
         Bundle extras= intent.getExtras();
         String name = null;
-        String strFinishDate = null;
-        boolean isShowed = false;
-        Date currentDate = null, finishDate = null;
         if(extras != null) {
             name = extras.getString("name");
-            strFinishDate = extras.getString("finishDate");
-            isShowed = extras.getBoolean("showed");
         }
-        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
-        String strCurrentDate = sdf.format(Calendar.getInstance().getTime());
-        try {
-            finishDate = sdf.parse(strFinishDate);
-            currentDate = sdf.parse(strCurrentDate);
-        } catch (ParseException e) {
-            e.printStackTrace();
-            Log.e("666", e.getMessage());
-        }
-        boolean inRange = currentDate.after(finishDate);
-        boolean isCurrentDate = currentDate.compareTo(finishDate) == 0;
-        if (inRange || isCurrentDate) {
-            intent.putExtra("showed", false);
-            sendNotification(context, " " + name);
-            AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-            PendingIntent pi = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-            am.cancel(pi);
-        }
-        else {
-            AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-            PendingIntent pi = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-            am.cancel(pi);
-        }
+        sendNotification(context, " " + name);
 //Разблокируем поток.
         wl.release();
     }
 
-    public void SetAlarm(Context context, String finishDate, String name) {
+    public void SetAlarm(Context context, String startDate, String name) {
         System.out.println(name);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+        Date date1 = null;
+        try {
+            date1 = sdf.parse(startDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, AlarmManagerBroadcastReceiver.class);
         intent.putExtra(ONE_TIME, Boolean.FALSE);//Задаем параметр интента
         intent.putExtra("name", name);
-        intent.putExtra("finishDate", finishDate);
         PendingIntent pi = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 //Устанавливаем интервал срабатывания в 5 секунд.
-        am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 1000*10, pi);
+        if (date1 != null) {
+            am.set(AlarmManager.RTC_WAKEUP, date1.getTime(), pi);
+        }
     }
 
 
