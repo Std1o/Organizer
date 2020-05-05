@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ArrayList<DataModel> list = new ArrayList<>();
     private RecyclerView rv;
     DBHelper dbHelper;
-    private static SQLiteDatabase database;
+    public static SQLiteDatabase database;
     RVAdapter adapter;
     Calendar dateCalendar = Calendar.getInstance();
     TextView tvDate;
