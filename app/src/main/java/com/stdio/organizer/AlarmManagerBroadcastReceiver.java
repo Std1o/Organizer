@@ -36,17 +36,19 @@ public class AlarmManagerBroadcastReceiver extends BroadcastReceiver {
 //Осуществляем блокировку
         wl.acquire();
         Bundle extras= intent.getExtras();
-        String name = null;
+        String title = null;
+        String text = null;
         if(extras != null) {
-            name = extras.getString("name");
+            title = extras.getString("title");
+            text = extras.getString("text");
         }
-        sendNotification(context, " " + name);
+        sendNotification(context, title, text);
 //Разблокируем поток.
         wl.release();
     }
 
-    public void SetAlarm(Context context, String startDate, String name) {
-        System.out.println(name);
+    public void SetAlarm(Context context, String startDate, String title, String text) {
+        System.out.println(title);
         SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
         Date date1 = null;
         try {
@@ -57,7 +59,8 @@ public class AlarmManagerBroadcastReceiver extends BroadcastReceiver {
         AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, AlarmManagerBroadcastReceiver.class);
         intent.putExtra(ONE_TIME, Boolean.FALSE);//Задаем параметр интента
-        intent.putExtra("name", name);
+        intent.putExtra("title", title);
+        intent.putExtra("text", text);
         PendingIntent pi = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 //Устанавливаем интервал срабатывания в 5 секунд.
         if (date1 != null) {
@@ -66,7 +69,7 @@ public class AlarmManagerBroadcastReceiver extends BroadcastReceiver {
     }
 
 
-    public void sendNotification(Context context, String messageBody) {
+    public void sendNotification(Context context, String title,  String messageBody) {
         int notificationCode = 378;
 
         Intent intent = new Intent(context, MainActivity.class);
@@ -90,7 +93,7 @@ public class AlarmManagerBroadcastReceiver extends BroadcastReceiver {
             NotificationCompat.Builder notificationCompat = new NotificationCompat.Builder(context, "dayPlanner")
                     .setSmallIcon(R.drawable.ic_launcher_foreground)
                     .setSound(defaultRingtone)
-                    .setContentTitle(context.getResources().getString(R.string.app_name))
+                    .setContentTitle(title)
                     .setAutoCancel(true)
                     .setContentIntent(pendingIntent)
                     .setContentText(messageBody);
@@ -100,7 +103,7 @@ public class AlarmManagerBroadcastReceiver extends BroadcastReceiver {
             NotificationCompat.Builder notificationCompat = new NotificationCompat.Builder(context, "dayPlanner")
                     .setSmallIcon(R.drawable.ic_launcher_foreground)
                     .setSound(defaultRingtone)
-                    .setContentTitle(context.getResources().getString(R.string.app_name))
+                    .setContentTitle(title)
                     .setAutoCancel(true)
                     .setContentIntent(pendingIntent)
                     .setContentText(messageBody);

@@ -148,7 +148,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         list.add(dataModel);
                         adapter.notifyDataSetChanged();
                         if(alarm!=null){
-                            alarm.SetAlarm(MainActivity.this, time, etTitle.getText().toString());
+                            alarm.SetAlarm(MainActivity.this, time, etTitle.getText().toString(),
+                                    etDescription.getText().toString());
                         }else{
                             Toast.makeText(MainActivity.this,"Alarm is null", Toast.LENGTH_SHORT).show();
                         }
