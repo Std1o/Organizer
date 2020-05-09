@@ -72,7 +72,9 @@ public class AlarmManagerBroadcastReceiver extends BroadcastReceiver {
     public void sendNotification(Context context, String title,  String messageBody) {
         int notificationCode = 378;
 
-        Intent intent = new Intent(context, MainActivity.class);
+        Intent intent = new Intent(context, InfoDialogActivity.class);
+        intent.putExtra("title", title);
+        intent.putExtra("text", messageBody);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, notificationCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
